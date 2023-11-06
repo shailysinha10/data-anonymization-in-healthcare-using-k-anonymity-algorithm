@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Login Page</title>
+    <link rel="stylesheet" href="style.css"> 
+  </head>
+  <body>
+    <h1>Login</h1>
+    <form>
+      <label for="username">Username:</label>
+      <input type="text" id="username" name="username"><br><br>
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password"><br><br>
+      <label for="usertype">Select user type:</label>
+      <select id="usertype" name="usertype">
+        <option value="admin">Admin</option>
+        <option value="doctor">Doctor</option>
+        <option value="researcher">Researcher</option>
+      </select><br><br>
+      <input type="button" value="Login" onclick="login()">
+    </form>
+    <div id="message"></div>
+    <script src="script.js"></script>
+  </body>
+</html>

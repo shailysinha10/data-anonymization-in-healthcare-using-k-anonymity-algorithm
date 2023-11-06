@@ -1,0 +1,111 @@
+<!-- admin.ejs -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Admin's page</title>
+    <style>
+      table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+      
+      th, td {
+        border: 1px solid black;
+        padding: 8px;
+        text-align: left;
+      }
+      
+      th {
+        background-color: #2d3e50; /* Blue background color */
+        color: white; /* White text color */
+      }
+      
+      td:nth-child(even) {
+        background-color: #f2f2f2; /* Light gray background color for even rows */
+      }
+      
+      #search-input {
+        padding: 10px;
+        border-radius: 5px;
+        border: none;
+        margin-bottom: 20px;
+        width: 30%;
+      }
+      
+      #search-input:focus {
+        outline: none;
+        box-shadow: 0 0 10px #2d3e50; /* Blue shadow when input is focused */
+      }  
+      
+      #logout-link {
+        display: block;
+        text-align: center;
+        margin-top: 20px;
+        color: #2d3e50;
+        text-decoration: none;
+        font-weight: bold;
+      }
+      
+      #logout-link:hover {
+        color: white;
+        background-color: #2d3e50;
+      }    
+    </style>     
+  </head>
+  <body>
+    <h1>Admin's Dashboard</h1>
+    <a href="/login-setup/login.html" id="logout-link">Logout</a>
+    <input type="text" id="search-input" placeholder="Search item...">
+    <table id="dataset-table"></table>
+    <script>
+      // Read the CSV file and render table
+      async function renderTable() {
+        const response = await fetch('insurance_data.csv');
+        const text = await response.text();
+        const rows = text.split('\n');
+        const table = document.getElementById('dataset-table');
+        const headers = rows[0].split(',');
+        let html = '<thead><tr>';
+        headers.forEach(header => {
+          html += `<th>${header}</th>`;
+        });
+        html += '</tr></thead><tbody>';
+        for (let i = 1; i < rows.length; i++) {
+          const row = rows[i].split(',');
+          html += '<tr>';
+          row.forEach(cell => {
+            html += `<td>${cell}</td>`;
+          });
+          html += '</tr>';
+        }
+        html += '</tbody>';
+        table.innerHTML = html;
+        // Add search functionality
+        const searchInput = document.getElementById('search-input');
+        searchInput.addEventListener('input', () => {
+          const filterValue = searchInput.value.trim().toLowerCase();
+          const rows = table.getElementsByTagName('tr');
+          for (let i = 1; i < rows.length; i++) {
+            let found = false;
+            const cells = rows[i].getElementsByTagName('td');
+            for (let j = 0; j < cells.length; j++) {
+              const cellText = cells[j].textContent.trim().toLowerCase();
+              if (cellText.includes(filterValue)) {
+                found = true;
+                break;
+              }
+            }
+            if (found) {
+              rows[i].style.display = '';
+            } else {
+              rows[i].style.display = 'none';
+            }
+          }
+        });
+      }
+      renderTable();
+    </script>
+  </body>
+</html>
+
+
